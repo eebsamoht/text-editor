@@ -5,6 +5,7 @@ const page = document.querySelector("#page");
 page.addEventListener('dragenter', onPageDragEnter);
 page.addEventListener('dragover', onPageDragOver);
 page.addEventListener('drop', onPageDrop);
+page.addEventListener('keydown', onPageKeydown);
 
 
 function onPageDragEnter(event) {
@@ -26,6 +27,46 @@ function onPageDrop(event) {
     console.log(event.dataTransfer.files[0]);
 
     onNewFileUploaded(event.dataTransfer.files);
+}
+
+
+function onPageKeydown(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+
+        const selectionStart = page.selectionStart;
+        const selectionEnd = page.selectionEnd;
+
+        const textUpToSelection = page.value.substring(0, selectionEnd);
+        const lines = textUpToSelection.split("\n");
+        const currentLine = lines[lines.length - 1];
+
+        var newline = "\n";
+        
+        if (currentLine[0] === " ") {
+            if (/^[0-9]$/.test(currentLine[1])) {
+                for (var i = 2; i < currentLine.length - 1; i++) {
+                    if (currentLine[i] === "." && currentLine[i + 1] === " ") {
+                        var listElementNumber = parseInt(currentLine.split(" ")[1]);
+                        if (listElementNumber !== NaN) {
+                            listElementNumber += 1;
+                            newline += " " + listElementNumber + ". ";
+                        }
+                        break;
+                    }
+                }
+            } else if (currentLine.substring(1, 3) === "- ") {
+                newline += " - ";
+            }
+        }
+
+        page.setRangeText(
+            newline,
+            selectionStart,
+            selectionEnd,
+            'end'
+        );
+    }
 }
 
 
