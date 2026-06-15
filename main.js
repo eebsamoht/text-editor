@@ -161,3 +161,19 @@ async function onSaveButtonClicked() {
         URL.revokeObjectURL(link.href);
     }
 }
+
+
+const newButton = document.querySelector("#newButton");
+newButton.addEventListener('click', onNewButtonClicked);
+
+
+async function onNewButtonClicked() {
+    if (page.value.length > 0) {
+        onSaveButtonClicked();
+    }
+
+    openFileHandle = null;
+    const docNameLabel = document.querySelector("#docNameLabel");
+    docNameLabel.textContent = "new.txt";
+    page.value = "";
+}
