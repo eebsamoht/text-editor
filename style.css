@@ -1,0 +1,102 @@
+:root {
+    --bg-element-color: #333;
+    --fg-element-color: rgba(100, 100, 100, 1);
+    --page-element-color: #eee;
+    --body-font-size: 14pt;
+    --body-font-family: serif;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+
+    background-color: var(--bg-element-color);
+}
+
+
+textarea {
+    resize: none;
+
+    width: 100%;
+    max-width: 6in;
+
+    height: 9in;
+    max-height: 9in;
+
+    margin: 0.5in auto;
+    padding: 0.5in;
+
+    border: 0;
+    border-radius: 0.25em;
+
+    outline: none;
+    box-shadow: 5px 5px 5px 2px rgba(0, 0, 0, 0.5);
+
+    font-size: var(--body-font-size);
+    font-family: var(--body-font-family);
+
+    background-color: var(--page-element-color);
+}
+
+
+button {
+    border: 0;
+    border-radius: 0.25em;
+
+    font-size: 16pt;
+    text-align: center;
+
+    color: var(--page-element-color);
+    background-color:rgba(79, 138, 255, 0);
+}
+
+
+button:hover {
+    color: rgb(118, 164, 255);
+}
+
+
+button:active {
+    box-shadow: inset 1px 1px 5px 2px rgba(0, 0, 0, 0.5);
+
+    color: rgb(118, 164, 255);
+    background-color: var(--bg-element-color);
+}
+
+
+#toolbar-container {
+    position: fixed;
+
+    display: flex;
+    justify-content: center;
+
+    top: 0;
+
+    width: 100vw;
+}
+
+
+#toolbar {
+    width: 100%;
+    max-width: 9in;
+
+    margin: 0 auto;
+    padding: 0.5em;
+
+    border-radius: 0 0 0.5em 0.5em;
+    
+    box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.5);
+
+    font-size: var(--body-font-size);
+    font-family: var(--body-font-family);
+
+    background-color: var(--fg-element-color);
+}
+
+
+#page-container {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+}
