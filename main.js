@@ -1,6 +1,3 @@
-const fileInput = document.querySelector("#fileInput");
-fileInput.addEventListener('change', () => { onNewFileUploaded(fileInput.files); });
-
 const page = document.querySelector("#page");
 page.addEventListener('dragenter', onPageDragEnter);
 page.addEventListener('dragover', onPageDragOver);
@@ -70,6 +67,10 @@ function onPageKeydown(event) {
 }
 
 
+const fileInput = document.querySelector("#fileInput");
+fileInput.addEventListener('change', () => { onNewFileUploaded(fileInput.files); });
+
+
 function onNewFileUploaded(files) {
     const file = files[0];
 
@@ -90,4 +91,28 @@ function onNewFileUploaded(files) {
         page.value = fReader.result;
     }
     fReader.readAsText(file);
+}
+
+
+const saveButton = document.querySelector("#saveButton");
+saveButton.addEventListener('click', onSaveButtonClicked);
+
+
+function onSaveButtonClicked() {
+    const finalBlob = new Blob([page.value], { type: 'text/plain' });
+
+    // check if File System API is supported for in-place editing
+    if ('showSaveFilePicker' in window) {
+        // use that API
+    } else {  // fallback to a good old download link.
+        const link = document.createElement('a');
+        link.download = document.querySelector("#docNameLabel").textContent;
+        link.href = URL.createObjectURL(finalBlob);
+
+        document.body.appendChild(link);
+        link.click();
+
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+    }
 }
