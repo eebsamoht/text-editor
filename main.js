@@ -1,3 +1,6 @@
+const isFileSystemAPISupported = 'showOpenFilePicker' in window;
+
+
 const page = document.querySelector("#page");
 page.addEventListener('dragenter', onPageDragEnter);
 page.addEventListener('dragover', onPageDragOver);
@@ -71,7 +74,7 @@ const fileInput = document.querySelector("#fileInput");
 fileInput.addEventListener('change', () => { onNewFileUploaded(fileInput.files); });
 
 
-function onNewFileUploaded(files) {
+async function onNewFileUploaded(files) {
     const file = files[0];
 
     if (!file) {
@@ -79,18 +82,48 @@ function onNewFileUploaded(files) {
         return;
     }
 
-    if (!file.type.startsWith("text")) {
+    if (!file.type === 'text/plain') {
         console.log("ERROR: file type unsupported (please stick to text files!)");
     }
 
     const docNameLabel = document.querySelector("#docNameLabel");
     docNameLabel.textContent = file.name;
+    page.value = await file.text();
+}
 
-    const fReader = new FileReader();
-    fReader.onload = () => {
-        page.value = fReader.result;
+
+const loadButton = document.querySelector("#loadButton");
+loadButton.addEventListener('click', onLoadButtonClicked);
+
+
+var openFileHandle;
+
+
+async function onLoadButtonClicked() {
+    if (isFileSystemAPISupported) {
+        const options = {
+            types: [
+                { description: "Text file", accept: { "text/*": [".txt"] }}
+            ]
+        };
+        [openFileHandle] = await window.showOpenFilePicker(options);
+        const file = await openFileHandle.getFile();
+
+        if (!file) {
+            console.log("ERROR: no file uploaded!");
+            return;
+        }
+    
+        if (!file.type === 'text/plain') {
+            console.log("ERROR: file type unsupported (please stick to text files!)");
+        }
+
+        const docNameLabel = document.querySelector("#docNameLabel");
+        docNameLabel.textContent = file.name;
+        page.value = await file.text();
+    } else {  // use fallback system
+        fileInput.click();
     }
-    fReader.readAsText(file);
 }
 
 
@@ -98,12 +131,24 @@ const saveButton = document.querySelector("#saveButton");
 saveButton.addEventListener('click', onSaveButtonClicked);
 
 
-function onSaveButtonClicked() {
+async function onSaveButtonClicked() {
     const finalBlob = new Blob([page.value], { type: 'text/plain' });
 
     // check if File System API is supported for in-place editing
-    if ('showSaveFilePicker' in window) {
-        // use that API
+    if (isFileSystemAPISupported) {
+        if (!openFileHandle) {
+            const options = {
+                suggestedName: "new.txt",
+                types: [
+                    { description: "Text file", accept: { "text/*": [".txt"] }}
+                ]
+            };
+            [openFileHandle] = await window.showSaveFilePicker(options);
+        }
+
+        const fileWriteStream = await openFileHandle.createWritable();
+        await fileWriteStream.write(finalBlob);
+        await fileWriteStream.close();
     } else {  // fallback to a good old download link.
         const link = document.createElement('a');
         link.download = document.querySelector("#docNameLabel").textContent;
