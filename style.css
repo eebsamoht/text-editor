@@ -2,6 +2,8 @@
     --bg-element-color: #333;
     --fg-element-color: rgba(100, 100, 100, 1);
     --page-element-color: #eee;
+    --toolbar-font-color: #ddd;
+    --toolbar-font-family: sans-serif;
     --body-font-size: 14pt;
     --body-font-family: serif;
 }
@@ -40,24 +42,32 @@ textarea {
 }
 
 
-button {
+.toolbarButton {
     border: 0;
     border-radius: 0.25em;
 
-    font-size: 16pt;
+    margin: 0.25em;
+    padding: 0.25em;
+
+    font-size: 12pt;
     text-align: center;
 
-    color: var(--page-element-color);
+    color: var(--toolbar-font-color);
     background-color:rgba(79, 138, 255, 0);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;    
 }
 
 
-button:hover {
+.toolbarButton:hover {
     color: rgb(118, 164, 255);
 }
 
 
-button:active {
+.toolbarButton:active {
     box-shadow: inset 1px 1px 5px 2px rgba(0, 0, 0, 0.5);
 
     color: rgb(118, 164, 255);
@@ -78,6 +88,9 @@ button:active {
 
 
 #toolbar {
+    display: flex;
+    justify-content: space-between;
+
     width: 100%;
     max-width: 9in;
 
@@ -87,10 +100,13 @@ button:active {
     border-radius: 0 0 0.5em 0.5em;
     
     box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.5);
+    
+    text-align: left;
+    
+    font-size: var(12pt);
+    font-family: var(--toolbar-font-family);
 
-    font-size: var(--body-font-size);
-    font-family: var(--body-font-family);
-
+    color: var(--toolbar-font-color);
     background-color: var(--fg-element-color);
 }
 
