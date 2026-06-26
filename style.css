@@ -111,6 +111,27 @@ textarea {
 }
 
 
+#doc-name-input {
+
+    border: none;
+
+    text-align: center;
+
+    font-size: 12pt;
+    font-family: var(--toolbar-font-family);
+
+    outline: none;
+
+    color: var(--toolbar-font-color);
+    background-color: var(--fg-element-color);
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;    
+}
+
+
 #page-container {
     display: flex;
     flex-direction: column;
